@@ -53,9 +53,9 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/mediocregopher/radix.v2/pool"
-	"github.com/mediocregopher/radix.v2/pubsub"
-	"github.com/mediocregopher/radix.v2/redis"
+	"github.com/catenoid-company/radix.v2/pool"
+	"github.com/catenoid-company/radix.v2/pubsub"
+	"github.com/catenoid-company/radix.v2/redis"
 )
 
 // ClientError is an error wrapper returned by operations in this package. It
