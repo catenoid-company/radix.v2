@@ -132,12 +132,16 @@ func NewClient(
 
 	masterPools := map[string]*pool.Pool{}
 	for _, name := range names {
-		r := client.Cmd("SENTINEL", "MASTER", name)
+		
+		//r := client.Cmd("SENTINEL", "MASTER", name)
+		//r := client.Cmd("SENTINEL", "GET-MASTER-ADDR-BY-NAMEget-master-addr-by-name", name)
+		r := client.Cmd("SENTINEL", "GET-MASTER-ADDR-BY-NAME", name)
 		l, err := r.List()
 		if err != nil {
 			return nil, &ClientError{err: err, SentinelErr: true}
 		}
-		addr := l[3] + ":" + l[5]
+		//addr := l[3] + ":" + l[5]
+		addr := l[0] + ":" + l[1]
 		pool, err := pool.New("tcp", addr, poolSize)
 		if err != nil {
 			return nil, &ClientError{err: err}
