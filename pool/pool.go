@@ -74,7 +74,7 @@ func (p *Pool) Get() (*redis.Client, error) {
 // closed instead. If the client is already closed (due to connection failure or
 // what-have-you) it will not be put back in the pool
 func (p *Pool) Put(conn *redis.Client) {
-	if conn.LastCritical == nil {
+	if conn == nil || conn.LastCritical == nil {
 		select {
 		case p.pool <- conn:
 		default:

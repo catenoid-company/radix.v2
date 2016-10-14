@@ -39,6 +39,8 @@ type Client struct {
 	// Close is automatically called on the client when it encounters a critical
 	// network error
 	LastCritical error
+
+	isConnected bool
 }
 
 // request describes a client's request to the redis server
@@ -67,6 +69,7 @@ func DialTimeout(network, addr string, timeout time.Duration) (*Client, error) {
 		completedHead: completed,
 		Network:       network,
 		Addr:          addr,
+		isConnected:   true,
 	}, nil
 }
 
@@ -77,7 +80,16 @@ func Dial(network, addr string) (*Client, error) {
 
 // Close closes the connection.
 func (c *Client) Close() error {
+	c.isConnected = false
 	return c.conn.Close()
+}
+
+func (c *Client) IsConnected() bool {
+	if c.conn == nil || c.isConnected == false {
+		return false
+	}
+
+	return true
 }
 
 // Cmd calls the given Redis command.
@@ -160,6 +172,10 @@ func (c *Client) ReadResp() *Resp {
 }
 
 func (c *Client) writeRequest(requests ...request) error {
+	if c.conn == nil || c.isConnected == false {
+		return errors.New("Redis is not connected")
+	}
+
 	if c.timeout != 0 {
 		c.conn.SetWriteDeadline(time.Now().Add(c.timeout))
 	}
