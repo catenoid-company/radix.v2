@@ -60,7 +60,7 @@ func TestFailover(t *T) {
 	require.Nil(t, c.Cmd("SET", k, "foo").Err)
 	s.PutMaster(c)
 
-	require.Nil(t, sc.Cmd("SENTINEL", "FAILOVER", ).Err)
+	require.Nil(t, sc.Cmd("SENTINEL", "FAILOVER", "test").Err)
 
 	c, err = s.GetMaster()
 	require.Nil(t, err)
@@ -71,7 +71,7 @@ func TestFailover(t *T) {
 	s.PutMaster(c)
 
 	time.Sleep(10 * time.Second)
-	require.Nil(t, sc.Cmd("SENTINEL", "FAILOVER", ).Err)
+	require.Nil(t, sc.Cmd("SENTINEL", "FAILOVER", "test").Err)
 
 	c, err = s.GetMaster()
 	require.Nil(t, err)
